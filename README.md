@@ -37,6 +37,10 @@ Due to the 3-day time constraint for reverse engineering and coding, the code is
 
 3. **Enjoy**: Launch the game and enjoy watching the bot in action!
 
+## Dependency
+
+you may need a ViGEmBus driver installed because my key-press methods provide Controller Mimic option. Although the default method is key injection that doesn't need a ViGEmBus, you can try to remove it from code if you don't want the ViGEmBus. 
+
 ---
 
 ## Features
