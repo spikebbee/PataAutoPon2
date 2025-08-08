@@ -44,8 +44,6 @@ System::Single_array* __stdcall Game_Unit_UnitTroop::Hooked_getUnitPosX(
 
         
 
-    // Offset 0x18: max_length
-
         return arr;
     }
 

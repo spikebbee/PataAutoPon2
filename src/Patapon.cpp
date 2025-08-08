@@ -69,8 +69,8 @@ int32_t Patapon::Initialize()
     }
     else
     {
-        Menu::AddLog(" x ViGEm setup failed.\n");
-        return 1;
+        Menu::AddLog(" x ViGEm setup failed. use Key-injection as default\n");
+        // return 1;
     }
 
     //-------------------------------------------------------------------
@@ -126,17 +126,6 @@ int32_t Patapon::Initialize()
 
     //-------------------------------------------------------------------
     Menu::AddLog("\n");Menu::AddLog("Ö Listening Command  \n");
-
-
-
-
-
-
-
-
-
-
-
 
     timeEndPeriod(1);
     return 0;
