@@ -30,7 +30,7 @@ LRESULT CALLBACK HookedWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             return 0;
         } 
     }
-    
+
     //original 
     return CallWindowProc(originalWndProc, hWnd, uMsg, wParam, lParam);
 }
@@ -103,6 +103,8 @@ int32_t Patapon::Initialize()
     GameSystem_Item_GlobalData::Hook_GameSystem_Item_GlobalData(base);
     GameSystem_Item_Operator::Hook_GameSystem_Item_Operator(base);
     Bases_Item_Slot::Hook_Bases_Item_Slot(base);
+    Game_Unit_UnitTroop::Hook_Game_Unit_UnitTroop(base);
+    GameSystem_Effect_Manager::Hook_GameSystem_Effect_Manager(base);
 
 
     // Game_Map_FogLayer::HookGame_Map_FogLayer(base);

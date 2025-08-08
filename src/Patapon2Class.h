@@ -6,6 +6,8 @@
 #include <chrono>
 #include <map>
 #include <utility>  
+#include <types.h>
+using namespace std::chrono;
 
 class Sound_BeatCommander
 {
@@ -367,4 +369,66 @@ public:
     static void Hook_Bases_Item_Slot(uintptr_t dllBase);
     static int16_t getItemNum(int32_t itemId);
     static int32_t  selectedSlot;
+};
+
+
+
+
+class Game_Unit_UnitTroop
+{
+    Game_Unit_UnitTroop() = default;
+
+private:
+using FnGetUnitPosX = System::Single_array* (__stdcall*)(
+        void* /*this*/,
+        bool  /*isTop_orTail*/,
+        bool  /*isCheckOtherTop*/,
+        bool  /*isLivingOnly*/,
+        const void* /*method*/);
+
+    static FnGetUnitPosX Orig_getUnitPosX;
+
+    static System::Single_array* __stdcall Hooked_getUnitPosX(
+        void* pThis,
+        bool isTop_orTail,
+        bool isCheckOtherTop,
+        bool isLivingOnly,
+        const void* method);
+
+public:
+
+    static void Hook_Game_Unit_UnitTroop(uintptr_t dllBase);
+    static float AverageUnitX;
+    static uint64_t UnitX_Time;
+
+};
+
+
+class GameSystem_Effect_Manager
+{
+    GameSystem_Effect_Manager() = default;
+
+private:
+    // P2_GameSystem_Effect_Effect_o* __stdcall (P2_GameSystem_Effect_Manager_o*, int32_t, uint32_t, Vector2*, Vector2*, float, const MethodInfo*)
+    static void* (__stdcall* Orig_generateItemEffect)(
+        void* pThis,
+        int32_t itemId,
+        uint32_t effectId,
+        void* position,   // UnityEngine_Vector2_o*
+        void* velocity,   // UnityEngine_Vector2_o*
+        float time,
+        const void* method);
+
+    static void* __stdcall Hooked_generateItemEffect(
+        void* pThis,
+        int32_t itemId,
+        uint32_t effectId,
+        void* position,   // UnityEngine_Vector2_o*
+        void* velocity,   // UnityEngine_Vector2_o*
+        float time,
+        const void* method);
+
+public:
+    static void Hook_GameSystem_Effect_Manager(uintptr_t dllBase);
+
 };

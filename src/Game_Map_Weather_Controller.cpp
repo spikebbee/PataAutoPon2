@@ -53,9 +53,9 @@ void Game_Map_Weather_Controller::Hooked_setWindDirection(void* dir, int32_t id,
 {
     UnityEngine_Vector2_o* vec = reinterpret_cast<UnityEngine_Vector2_o*>(dir);
     if (vec) {
-        Menu::AddLog("  @ setWindDirection (id=%d): dir = (%.2f, %.2f)\n", id, vec->x, vec->y);
+        // Menu::AddLog("  @ setWindDirection (id=%d): dir = (%.2f, %.2f)\n", id, vec->x, vec->y);
     } else {
-        Menu::AddLog("  @ setWindDirection (id=%d): dir = null\n", id);
+        // Menu::AddLog("  @ setWindDirection (id=%d): dir = null\n", id);
     }
 
     vec->x = Menu::WeatherSetting.WindDirection_X;
