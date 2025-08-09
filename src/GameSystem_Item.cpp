@@ -60,7 +60,8 @@ void GameSystem_Item_GlobalData::DumpOneItem_Raw(uint32_t id)
     utf8Str[bytesWritten] = '\0';
     if (length>0)
     {
-        Menu::AddLog(" - ID: %llu, Num: %d,  category: %i,modelname: %s\n", id, num, categoryId, utf8Str);
+        // Menu::AddLog(" - ID: %llu, Num: %d,  category: %i,modelname: %s\n", id, num, categoryId, utf8Str);
+        if(num==0 && Menu::GameHackSetting.UnlockAllItems) GameSystem_Item_Operator::ThisTestAddItem(GameSystem_Item_Operator::ItemOperatorPtr, id, 1);
         GameSystem_Item_Operator::TestDumpItemParam(id);
     }
     
@@ -90,7 +91,7 @@ void GameSystem_Item_GlobalData::DumpAllItems_Raw()
     // Offset 0x20: pointer array of item pointers
     void** itemPtrArray = reinterpret_cast<void**>((uint8_t*)itemsArray + 0x20);
 
-    Menu::AddLog("[ItemDump] Dumping %llu items:\n", maxLength);
+    // Menu::AddLog("[ItemDump] Dumping %llu items:\n", maxLength);
     if(maxLength>1000) return;
     for (uint32_t id = 0; id < maxLength; ++id)
     {
@@ -140,7 +141,7 @@ void* GameSystem_Item_Operator::TestDumpItemParam(int32_t itemId)
     return itemParam;
 }
 
-
+static bool SkipTheItemDump=false;
 void GameSystem_Item_Operator::TestAddItem(int32_t itemId, int32_t num)
 {
 
@@ -149,10 +150,21 @@ void GameSystem_Item_Operator::TestAddItem(int32_t itemId, int32_t num)
     auto* instance = reinterpret_cast<void*>(dummyBuffer);
     using FnCtor = void(__stdcall*)(void*, const void*);
     FnCtor Ctor_ItemOperator = reinterpret_cast<FnCtor>(dllBaseSave + 0x05AAC30);
+    SkipTheItemDump = true;
     Ctor_ItemOperator(instance, nullptr); // now it's fully initialized!
+    SkipTheItemDump=false;
     Menu::AddLog("  ! try add item_%i by %i\n",itemId, num);
     AddItem(instance, itemId, num, nullptr);
 }
+
+void GameSystem_Item_Operator::ThisTestAddItem(void* ItemOperatorPtr, int32_t itemId, int32_t num)
+{
+
+    auto AddItem = reinterpret_cast<FnAddItem>(GameSystem_Item_Operator::AddItemAddr);
+    Menu::AddLog("  ! try add item_%i by %i\n",itemId, num);
+    AddItem(ItemOperatorPtr, itemId, num, nullptr);
+}
+
 
 void __stdcall GameSystem_Item_Operator::Hooked_subItem(void* pThis, int32_t itemId, int32_t num, const void* method)
 {
@@ -172,6 +184,15 @@ void __stdcall GameSystem_Item_Operator::Hooked_ctor(void* pThis, const void* me
     // Menu::AddLog("[ItemOperator] ctor called, this = %p\n", pThis);
     // Call original constructor
     Orig_ctor(pThis, method);
+
+
+    if(Menu::GameHackSetting.UnlockAllItems && SkipTheItemDump==false )
+    {
+        GameSystem_Item_GlobalData::DumpAllItems_Raw();
+        Menu::GameHackSetting.UnlockAllItems = false;
+    }
+
+
 }
 
 void GameSystem_Item_Operator::Hook_GameSystem_Item_Operator(uintptr_t dllBase)

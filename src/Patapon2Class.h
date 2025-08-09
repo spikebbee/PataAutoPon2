@@ -331,6 +331,7 @@ public:
     static void Hook_GameSystem_Item_Operator(uintptr_t dllBase);
     static void* TestDumpItemParam(int32_t itemId);
     static void TestAddItem(int32_t itemId, int32_t num);
+    static void ThisTestAddItem(void* ItemOperatorPtr, int32_t itemId, int32_t num);
     static uintptr_t dllBaseSave;
 
 };
