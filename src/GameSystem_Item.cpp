@@ -61,7 +61,7 @@ void GameSystem_Item_GlobalData::DumpOneItem_Raw(uint32_t id)
     if (length>0)
     {
         // Menu::AddLog(" - ID: %llu, Num: %d,  category: %i,modelname: %s\n", id, num, categoryId, utf8Str);
-        if(num==0 && Menu::GameHackSetting.UnlockAllItems) GameSystem_Item_Operator::ThisTestAddItem(GameSystem_Item_Operator::ItemOperatorPtr, id, 1);
+        if(num<99 && Menu::GameHackSetting.UnlockAllItems) GameSystem_Item_Operator::ThisTestAddItem(GameSystem_Item_Operator::ItemOperatorPtr, id, 99);
         GameSystem_Item_Operator::TestDumpItemParam(id);
     }
     
