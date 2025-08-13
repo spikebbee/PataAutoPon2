@@ -326,7 +326,7 @@ using Fn_InitTypeInfo = long long(__fastcall*)(volatile long long*);            
 using Fn_Labo_GetRoot = __int64   (__fastcall*)(void* klass, const void* method); // sub_1804B41B0
 
 // RVAs (GameAssembly.dll)
-static constexpr uintptr_t RVA_TypeInfoSlot = 0x03089C70; // P2_LaboCommon_TypeInfo (.data slot)
+static constexpr uintptr_t RVA_TypeInfoSlot = 0x03089C70; // P2_LaboCommon_TypeInfo 
 static constexpr uintptr_t RVA_InitTypeInfo = 0x003D98C0; // sub_1803D98C0
 static constexpr uintptr_t RVA_LaboGetRoot  = 0x004B41B0; // sub_1804B41B0
 
@@ -340,10 +340,9 @@ int32_t laboGlobalData::getMoney(bool fixAt99999)
     auto LaboGetRoot  = reinterpret_cast<Fn_Labo_GetRoot>(base + RVA_LaboGetRoot);
     if (!InitTypeInfo || !LaboGetRoot) return 0;
 
-    // Use the GAME'S data slot, not a local static
     auto slot = reinterpret_cast<volatile long long*>(base + RVA_TypeInfoSlot);
 
-    // Resolve cookie -> Il2CppClass* (idempotent)
+
     InitTypeInfo(slot);
 
     void* klass = reinterpret_cast<void*>(*slot);
@@ -361,7 +360,7 @@ int32_t laboGlobalData::getMoney(bool fixAt99999)
     const uintptr_t v8 = *reinterpret_cast<const uintptr_t*>(v5 + 0x20);
     if (!v8) return 0;
 
-    // money = *(v8 + 0x18)  // DWORD (same as +24 decimal in your decompile)
+    // money = *(v8 + 0x18)  
     if(fixAt99999) *reinterpret_cast<int32_t*>(v8 + 0x18)=99999;
 
     return *reinterpret_cast<int32_t*>(v8 + 0x18);
