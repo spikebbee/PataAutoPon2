@@ -318,3 +318,51 @@ void Bases_Item_Slot::Hook_Bases_Item_Slot(uintptr_t dllBase)
     DetourAttach(&(PVOID&)Orig_SlotSelector_update, Hooked_SlotSelector_update);
 
 }
+
+
+
+// Signatures
+using Fn_InitTypeInfo = long long(__fastcall*)(volatile long long*);              // sub_1803D98C0
+using Fn_Labo_GetRoot = __int64   (__fastcall*)(void* klass, const void* method); // sub_1804B41B0
+
+// RVAs (GameAssembly.dll)
+static constexpr uintptr_t RVA_TypeInfoSlot = 0x03089C70; // P2_LaboCommon_TypeInfo (.data slot)
+static constexpr uintptr_t RVA_InitTypeInfo = 0x003D98C0; // sub_1803D98C0
+static constexpr uintptr_t RVA_LaboGetRoot  = 0x004B41B0; // sub_1804B41B0
+
+int32_t laboGlobalData::getMoney(bool fixAt99999)
+{
+    HMODULE hGA = GetModuleHandleA("GameAssembly.dll");
+    if (!hGA) return 0;
+
+    const auto base = reinterpret_cast<uintptr_t>(hGA);
+    auto InitTypeInfo = reinterpret_cast<Fn_InitTypeInfo>(base + RVA_InitTypeInfo);
+    auto LaboGetRoot  = reinterpret_cast<Fn_Labo_GetRoot>(base + RVA_LaboGetRoot);
+    if (!InitTypeInfo || !LaboGetRoot) return 0;
+
+    // Use the GAME'S data slot, not a local static
+    auto slot = reinterpret_cast<volatile long long*>(base + RVA_TypeInfoSlot);
+
+    // Resolve cookie -> Il2CppClass* (idempotent)
+    InitTypeInfo(slot);
+
+    void* klass = reinterpret_cast<void*>(*slot);
+    if (!klass) return 0;
+
+    // v4: LaboCommon accessor root
+    const __int64 v4 = LaboGetRoot(klass, nullptr);
+    if (!v4) return 0;
+
+    // v5 = *(v4 + 0x20)  // LaboGlobalData*
+    const uintptr_t v5 = *reinterpret_cast<const uintptr_t*>(v4 + 0x20);
+    if (!v5) return 0;
+
+    // v8 = *(v5 + 0x20)  // BasesData*
+    const uintptr_t v8 = *reinterpret_cast<const uintptr_t*>(v5 + 0x20);
+    if (!v8) return 0;
+
+    // money = *(v8 + 0x18)  // DWORD (same as +24 decimal in your decompile)
+    if(fixAt99999) *reinterpret_cast<int32_t*>(v8 + 0x18)=99999;
+
+    return *reinterpret_cast<int32_t*>(v8 + 0x18);
+}

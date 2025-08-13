@@ -310,6 +310,18 @@ public:
 
 
 
+class laboGlobalData
+{
+    laboGlobalData() = default;
+
+private:
+
+public:
+    static int32_t getMoney(bool fixAt99999);
+
+
+};
+
 class GameSystem_Item_Operator
 {
     GameSystem_Item_Operator() = default;
