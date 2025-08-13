@@ -18,7 +18,7 @@ This project is open-source and can be freely used. However, please use it respo
 
 ## Source Code
 
-Due to the 3-day time constraint for reverse engineering and coding, the code is not as well-organized as it could be. I should have defined types better and structured the code more clearly. Feel free to improve and refactor it!
+This is a 3-day fun project, the code is not as well-organized as it could be. I should have defined types better and structured the code more clearly. Feel free to improve and refactor it!
 
 ---
 
@@ -56,6 +56,7 @@ you may need a ViGEmBus driver installed because my key-press methods provide Co
 - Log display for tracking actions
 - Inventory editing
 - Control configuration customization
+- 99 items and 99999 Ka-ching
 
 ---
 
