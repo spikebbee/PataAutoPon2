@@ -29,6 +29,10 @@ struct GameHack
     float DamageMultiplier = 1.0f;
     bool Invincible =true;
     bool NoZeroItem = true;
+    bool DropsOnYourHead = true;
+    bool UnlockAllItems = false;
+    bool KaChing99999 = true;
+
 };
 
 

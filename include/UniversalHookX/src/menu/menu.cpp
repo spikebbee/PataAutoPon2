@@ -107,7 +107,7 @@ namespace Menu {
                 
             for(int i=0;i<Sound_BeatCommander::TickRecord.size();i++)
             {
-                Ticks[Sound_BeatCommander::TickRecord.size()-i]=(Sound_BeatCommander::TickRecord[i]*1.0f);
+                Ticks[Sound_BeatCommander::TickRecord.size()-1-i]=(Sound_BeatCommander::TickRecord[i]*1.0f);
             }
 
             ImGui::PlotHistogram(buffer, Ticks, TickSize, 0, NULL, 0.0f, 1200.0f,graphSize);
@@ -149,18 +149,19 @@ namespace Menu {
 
                 ImGui::Checkbox("Invincible", &GameHackSetting.Invincible);
                 ImGui::Checkbox("Item Num > 0", &GameHackSetting.NoZeroItem);
-                
+                ImGui::Checkbox("DropsOnYourHead", &GameHackSetting.DropsOnYourHead);
+                ImGui::Checkbox("UnlockAllItems", &GameHackSetting.UnlockAllItems);
 
 
                 // --- Damage Multiplier (sqrt nonlinear slider) ---
                 ImGui::SetNextItemWidth(120.0f);
                 {
                     float curveSlider = sqrtf(sqrtf(GameHackSetting.DamageMultiplier));  // always reflect current value
-                    if (ImGui::SliderFloat("##DamageMultiplierSlider", &curveSlider, sqrtf(sqrtf(0.2f)), sqrtf(sqrtf(100.0f)), "")) {
+                    if (ImGui::SliderFloat("##DamageMultiplierSlider", &curveSlider, sqrtf(sqrtf(0.02f)), sqrtf(sqrtf(100.0f)), "")) {
                         GameHackSetting.DamageMultiplier = curveSlider * curveSlider * curveSlider * curveSlider;
                     }
                     ImGui::SameLine();
-                    ImGui::Text("Damage Multiplier = %.1f", GameHackSetting.DamageMultiplier);
+                    ImGui::Text("Damage Multiplier = %.2f", GameHackSetting.DamageMultiplier);
                 }
 
 
@@ -408,9 +409,12 @@ namespace Menu {
             static bool autoFocusItem=true;
             static int addItemBy=1;
 
-            ImGui::Checkbox("Auto-focus   ", &autoFocusItem);
-            ImGui::SameLine();
-            ImGui::SetNextItemWidth(130.0f); ImGui::SliderInt("Add Item", &addItemBy, 1, 9, "%i");
+            ImGui::Checkbox("Slot Auto Focus   ", &autoFocusItem);
+            ImGui::Checkbox("Always 99999 Ka-Ching   ", &GameHackSetting.KaChing99999);
+            ImGui::Text("Ka-Ching: %i",laboGlobalData::getMoney(GameHackSetting.KaChing99999));
+            ImGui::Separator();
+            ImGui::SetNextItemWidth(120.0f); ImGui::SliderInt("Add Item", &addItemBy, 1, 9, "%i");
+
 
             ImVec2 child_size = ImVec2(0, 500); // fixed or max height
             ImGui::BeginChild("Items", child_size, true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
@@ -557,6 +561,8 @@ namespace Menu {
 
             ImGui::EndTabItem();
         }
+
+    ImGui::EndTabBar(); 
 
     }
 
