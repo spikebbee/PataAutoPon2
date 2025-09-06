@@ -151,7 +151,8 @@ void GameSystem_Item_Operator::TestAddItem(int32_t itemId, int32_t num)
     static uint8_t dummyBuffer[0x1024]; //buffer
     auto* instance = reinterpret_cast<void*>(dummyBuffer);
     using FnCtor = void(__stdcall*)(void*, const void*);
-    FnCtor Ctor_ItemOperator = reinterpret_cast<FnCtor>(dllBaseSave + 0x05AAC30);
+    auto addr = ResolveMethod_ByNameAuto<void*>("P2.GameSystem.Item","Operator",".ctor");
+    FnCtor Ctor_ItemOperator = reinterpret_cast<FnCtor>(addr);
     SkipTheItemDump = true;
     Ctor_ItemOperator(instance, nullptr); // now it's fully initialized!
     SkipTheItemDump=false;
