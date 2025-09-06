@@ -42,7 +42,8 @@ void* __stdcall GameSystem_Effect_Manager::Hooked_generateItemEffect(
 
 void GameSystem_Effect_Manager::Hook_GameSystem_Effect_Manager(uintptr_t dllBase)
 {
-    // Absolute shown: 0x00000001805B3660 -> offset from base is 0x05B3660
-    Orig_generateItemEffect = reinterpret_cast<decltype(Orig_generateItemEffect)>(dllBase + 0x05B3660);
+
+    auto addr = ResolveMethod_ByNameAuto<void*>("P2.GameSystem.Effect", "Manager", "generateItemEffect");
+    Orig_generateItemEffect = reinterpret_cast<decltype(Orig_generateItemEffect)>(addr);
     DetourAttach(&(PVOID&)Orig_generateItemEffect, Hooked_generateItemEffect);
 }

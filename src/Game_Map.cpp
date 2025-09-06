@@ -17,7 +17,8 @@ void Game_Map_FogLayer::Hooked_setFogLevel(uint32_t level, const void* method)
 void Game_Map_FogLayer::HookGame_Map_FogLayer(uintptr_t dllBase)
 {
     // Hook setFogLevel
-    Orig_setFogLevel = reinterpret_cast<decltype(Orig_setFogLevel)>(dllBase + 0x078D150);
+    auto addr = ResolveMethod_ByNameAuto<void*>("P2.Game.Map", "FogLayer", "setFogLevel");
+    Orig_setFogLevel = reinterpret_cast<decltype(Orig_setFogLevel)>(addr);
     auto FogLevel = &Game_Map_FogLayer::Hooked_setFogLevel;
 
     //not needed

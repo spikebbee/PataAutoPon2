@@ -50,9 +50,8 @@ System::Single_array* __stdcall Game_Unit_UnitTroop::Hooked_getUnitPosX(
 void Game_Unit_UnitTroop::Hook_Game_Unit_UnitTroop(uintptr_t dllBase)
 {
     
-
-
-    Orig_getUnitPosX = reinterpret_cast<FnGetUnitPosX>(dllBase + 0x06D3090);
+    auto addr = ResolveMethod_ByNameAuto<void*>("P2.Game.Unit", "UnitTroop", "getUnitPosX");
+    Orig_getUnitPosX = reinterpret_cast<FnGetUnitPosX>(addr);
     DetourAttach(reinterpret_cast<PVOID*>(&Orig_getUnitPosX), Hooked_getUnitPosX);
 
 

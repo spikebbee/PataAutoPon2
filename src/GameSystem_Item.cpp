@@ -102,7 +102,9 @@ void GameSystem_Item_GlobalData::DumpAllItems_Raw()
 
 void GameSystem_Item_GlobalData::Hook_GameSystem_Item_GlobalData(uintptr_t dllBase)
 {
-    Orig_settingDefaultData = reinterpret_cast<decltype(Orig_settingDefaultData)>(dllBase + 0x05AA060);
+
+    auto addr = ResolveMethod_ByNameAuto<void*>("P2.GameSystem.Item", "GlobalData", "settingDefaultData");
+    Orig_settingDefaultData = reinterpret_cast<decltype(Orig_settingDefaultData)>(addr);
     auto settingDefaultData = &GameSystem_Item_GlobalData::Hooked_settingDefaultData;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_settingDefaultData), reinterpret_cast<PVOID&>(settingDefaultData));
 }
@@ -197,14 +199,18 @@ void __stdcall GameSystem_Item_Operator::Hooked_ctor(void* pThis, const void* me
 
 void GameSystem_Item_Operator::Hook_GameSystem_Item_Operator(uintptr_t dllBase)
 {
-    Orig_ctor = reinterpret_cast<decltype(Orig_ctor)>(dllBase + 0x05AAC30);
+    void* addr = ResolveMethod_ByNameAuto<void*>("P2.GameSystem.Item","Operator", ".ctor");
+    Orig_ctor = reinterpret_cast<decltype(Orig_ctor)>(addr);
     DetourAttach(&(PVOID&)Orig_ctor, Hooked_ctor);
 
-    Orig_subItem = reinterpret_cast<decltype(Orig_subItem)>(dllBase + 0x05AAF60);
+
+    addr = ResolveMethod_ByNameAuto<void*>("P2.GameSystem.Item","Operator", "subItem");
+    Orig_subItem = reinterpret_cast<decltype(Orig_subItem)>(addr);
     DetourAttach(&(PVOID&)Orig_subItem, Hooked_subItem);
 
-    GetItemParamAddr = dllBase + 0x05AB0B0;
-    AddItemAddr = dllBase + 0x05AAE30;
+    GetItemParamAddr = reinterpret_cast<uintptr_t>(ResolveMethod_ByNameAuto<void*>("P2.GameSystem.Item","Operator", "getItemParam"));
+    AddItemAddr = reinterpret_cast<uintptr_t>(ResolveMethod_ByNameAuto<void*>("P2.GameSystem.Item","Operator", "addItem"));
+
 
     dllBaseSave = dllBase;
 
@@ -308,13 +314,18 @@ void __stdcall Bases_Item_Slot::Hooked_SlotSelector_update(
 
 void Bases_Item_Slot::Hook_Bases_Item_Slot(uintptr_t dllBase)
 {
-    Orig_setItemId = reinterpret_cast<decltype(Orig_setItemId)>(dllBase + 0x087E430);
+    
+    void* addr = ResolveMethod_ByNameAuto<void*>("P2.Bases.Item","Slot", "setItemId");
+    Orig_setItemId = reinterpret_cast<decltype(Orig_setItemId)>(addr);
     DetourAttach(&(PVOID&)Orig_setItemId, Hooked_setItemId);
 
-    Orig_render = reinterpret_cast<decltype(Orig_render)>(dllBase + 0x087E580);
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Bases.Item","Slot", "renderBelongNum");
+    Orig_render = reinterpret_cast<decltype(Orig_render)>(addr);
     DetourAttach(&(PVOID&)Orig_render, Hooked_render);
 
-    Orig_SlotSelector_update = reinterpret_cast<decltype(Orig_SlotSelector_update)>(dllBase + 0x087E9F0);
+
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Bases.Item","SlotSelector", "update");
+    Orig_SlotSelector_update = reinterpret_cast<decltype(Orig_SlotSelector_update)>(addr);
     DetourAttach(&(PVOID&)Orig_SlotSelector_update, Hooked_SlotSelector_update);
 
 }

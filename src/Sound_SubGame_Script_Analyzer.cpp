@@ -37,7 +37,9 @@ bool Sound_SubGame_Script_Analyzer::Hooked_isNgHit(const void* method)
 
 void Sound_SubGame_Script_Analyzer::Hook_Sound_SubGame_Script_Analyzer(uintptr_t dllBase)
 {
-    Orig_hitCheck = reinterpret_cast<decltype(Orig_hitCheck)>(dllBase + 0x0536180);
+
+    auto addr = ResolveMethod_ByNameAuto<void*>("P2.Sound.SubGame.Script","Analyzer","hitCheck");
+    Orig_hitCheck = reinterpret_cast<decltype(Orig_hitCheck)>(addr);
     auto hitCheck = &Sound_SubGame_Script_Analyzer::Hooked_hitCheck;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_hitCheck),reinterpret_cast<PVOID&>(hitCheck));
 

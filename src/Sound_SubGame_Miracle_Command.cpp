@@ -29,12 +29,15 @@ bool Sound_SubGame_Miracle_Command::Hooked_hitKey(int32_t percussion, bool gonex
 
 void Sound_SubGame_Miracle_Command::Hook_Sound_SubGame_Miracle_Command(uintptr_t dllBase)
 {
-    Orig_addCount = reinterpret_cast<decltype(Orig_addCount)>(dllBase + 0x050D9A0); 
+    
+    void* addr = ResolveMethod_ByNameAuto<void*>("P2.Sound.SubGame.Miracle", "Command", "addCount");
+    Orig_addCount = reinterpret_cast<decltype(Orig_addCount)>(addr); 
     auto hookFunc = &Sound_SubGame_Miracle_Command::Hooked_addCount;
     // DetourAttach(&reinterpret_cast<PVOID&>(Orig_addCount), reinterpret_cast<PVOID&>(hookFunc));
 
     
-    Orig_hitKey = reinterpret_cast<decltype(Orig_hitKey)>(dllBase + 0x050DD50);
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Sound.SubGame.Miracle", "Command", "hitKey");
+    Orig_hitKey = reinterpret_cast<decltype(Orig_hitKey)>(addr);
     auto hitKeyHook = &Sound_SubGame_Miracle_Command::Hooked_hitKey;
     // DetourAttach(&reinterpret_cast<PVOID&>(Orig_hitKey), reinterpret_cast<PVOID&>(hitKeyHook));
 

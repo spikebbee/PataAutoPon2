@@ -95,10 +95,8 @@ bool GameSystem_DamageCalculation::Hooked_calcDamage(
 
 void GameSystem_DamageCalculation::Hook_GameSystem_DamageCalculation(uintptr_t dllBase)
 {
-    // Orig_calcAttackPower = reinterpret_cast<decltype(Orig_calcAttackPower)>(dllBase + 0x0548EA0);
-    // DetourAttach(&(PVOID&)Orig_calcAttackPower, Hooked_calcAttackPower);
-
-    Orig_calcDamage = reinterpret_cast<decltype(Orig_calcDamage)>(dllBase + 0x05490C0);
+    auto addr = ResolveMethod_ByNameAuto<void*>("P2.GameSystem", "DamageCalculation", "calcDamage");
+    Orig_calcDamage = reinterpret_cast<decltype(Orig_calcDamage)>(addr);
     DetourAttach(&(PVOID&)Orig_calcDamage, Hooked_calcDamage);
 
 

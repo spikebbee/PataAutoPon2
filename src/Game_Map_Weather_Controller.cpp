@@ -116,47 +116,57 @@ void Game_Map_Weather_Controller::Hooked_setThunderLevel(uint32_t level, int32_t
 void Game_Map_Weather_Controller::HookGame_Map_Weather_Controller(uintptr_t dllBase)
 {
     // Hook changeWeather
-    Orig_changeWeather = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, uint32_t, float, int32_t, const void*)>(dllBase + 0x07CC7F0);
+    void* addr;
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Game.Map.Weather", "Controller", "changeWeather");
+    Orig_changeWeather = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, uint32_t, float, int32_t, const void*)>(addr);
     auto changeWeather = &Game_Map_Weather_Controller::Hooked_changeWeather;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_changeWeather), reinterpret_cast<PVOID&>(changeWeather));
 
     // Hook setWindLevel
-    Orig_setWindLevel = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, uint32_t, int32_t, const void*)>(dllBase + 0x07CCA90);
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Game.Map.Weather", "Controller", "setWindLevel");
+    Orig_setWindLevel = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, uint32_t, int32_t, const void*)>(addr);
     auto setWindLevel = &Game_Map_Weather_Controller::Hooked_setWindLevel;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_setWindLevel), reinterpret_cast<PVOID&>(setWindLevel));
 
     // Hook setWindDirection
-    Orig_setWindDirection = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, void*, int32_t, const void*)>(dllBase + 0x07CCCC0);
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Game.Map.Weather", "Controller", "setWindDirection");
+    Orig_setWindDirection = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, void*, int32_t, const void*)>(addr);
     auto setWindDirection = &Game_Map_Weather_Controller::Hooked_setWindDirection;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_setWindDirection), reinterpret_cast<PVOID&>(setWindDirection));
 
     // Hook setRainyLevel
-    Orig_setRainyLevel = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, uint32_t, int32_t, const void*)>(dllBase + 0x07CCE20);
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Game.Map.Weather", "Controller", "setRainyLevel");
+    Orig_setRainyLevel = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, uint32_t, int32_t, const void*)>(addr);
     auto setRainyLevel = &Game_Map_Weather_Controller::Hooked_setRainyLevel;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_setRainyLevel), reinterpret_cast<PVOID&>(setRainyLevel));
 
     // Hook setCloudyLevel
-    Orig_setCloudyLevel = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, uint32_t, int32_t, const void*)>(dllBase + 0x07CD0B0);
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Game.Map.Weather", "Controller", "setCloudyLevel");
+    Orig_setCloudyLevel = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, uint32_t, int32_t, const void*)>(addr);
     auto setCloudyLevel = &Game_Map_Weather_Controller::Hooked_setCloudyLevel;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_setCloudyLevel), reinterpret_cast<PVOID&>(setCloudyLevel));
 
     // Hook setSnowLevel
-    Orig_setSnowLevel = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, uint32_t, int32_t, const void*)>(dllBase + 0x07CD3D0);
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Game.Map.Weather", "Controller", "setSnowLevel");
+    Orig_setSnowLevel = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, uint32_t, int32_t, const void*)>(addr);
     auto setSnowLevel = &Game_Map_Weather_Controller::Hooked_setSnowLevel;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_setSnowLevel), reinterpret_cast<PVOID&>(setSnowLevel));
 
     // Hook setFogLevel
-    Orig_setFogLevel = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, uint32_t, int32_t, const void*)>(dllBase + 0x07CD560);
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Game.Map.Weather", "Controller", "setFogLevel");
+    Orig_setFogLevel = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, uint32_t, int32_t, const void*)>(addr);
     auto setFogLevel = &Game_Map_Weather_Controller::Hooked_setFogLevel;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_setFogLevel), reinterpret_cast<PVOID&>(setFogLevel));
 
     // Hook setSandLevel
-    Orig_setSandLevel = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, uint32_t, int32_t, const void*)>(dllBase + 0x07CD6F0);
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Game.Map.Weather", "Controller", "setSandLevel");
+    Orig_setSandLevel = reinterpret_cast<void(__thiscall*)(Game_Map_Weather_Controller*, uint32_t, int32_t, const void*)>(addr);
     auto setSandLevel = &Game_Map_Weather_Controller::Hooked_setSandLevel;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_setSandLevel), reinterpret_cast<PVOID&>(setSandLevel));
 
     //Hook setThunderLevel
-    Orig_setThunderLevel = reinterpret_cast<decltype(Orig_setThunderLevel)>(dllBase + 0x07CD240);  
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Game.Map.Weather", "Controller", "setThunderLevel");
+    Orig_setThunderLevel = reinterpret_cast<decltype(Orig_setThunderLevel)>(addr);  
     auto ThunderLevel = &Game_Map_Weather_Controller::Hooked_setThunderLevel;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_setThunderLevel), reinterpret_cast<PVOID&>(ThunderLevel));
 

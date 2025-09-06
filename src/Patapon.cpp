@@ -80,7 +80,7 @@ int32_t Patapon::Initialize()
     while (!(hGameAssembly = GetModuleHandleA("GameAssembly.dll")))
         Sleep(100);
     uintptr_t base = (uintptr_t)hGameAssembly;
-    uintptr_t addr = base + 0x4E3D50;  // RVA of getNextBeatTickTime
+
 
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
@@ -88,17 +88,24 @@ int32_t Patapon::Initialize()
 
     Menu::AddLog(" - Hook Sound_BeatCommander.\n");
     Sound_BeatCommander::HookSound_BeatCommander(base);
+    
     Menu::AddLog(" - Hook Game_Map_Weather_Controller.\n");
     Game_Map_Weather_Controller::HookGame_Map_Weather_Controller(base);
+    
     Menu::AddLog(" - Hook Sound_SubGame_Script_Analyzer.\n");
     Sound_SubGame_Script_Analyzer::Hook_Sound_SubGame_Script_Analyzer(base);
+
     Menu::AddLog(" - Hook Game_Sound_AttackCommand.\n");
     Game_Sound_AttackCommand::Hook_Game_Sound_AttackCommand(base);
+
     Menu::AddLog(" - Hook Game_Miracle_Controller.\n");
     Game_Miracle_Controller::Hook_Game_Miracle_Controller(base);
+
     Menu::AddLog(" - Hook GameSystem_DamageCalculation.\n");
     GameSystem_DamageCalculation::Hook_GameSystem_DamageCalculation(base);
     Sound_SubGame_Scorer::Hook_Sound_SubGame_Scorer(base);
+
+
     Menu::AddLog(" - Hook GameSystem_Item.\n");
     GameSystem_Item_GlobalData::Hook_GameSystem_Item_GlobalData(base);
     GameSystem_Item_Operator::Hook_GameSystem_Item_Operator(base);
@@ -107,9 +114,10 @@ int32_t Patapon::Initialize()
     GameSystem_Effect_Manager::Hook_GameSystem_Effect_Manager(base);
 
 
-    // Game_Map_FogLayer::HookGame_Map_FogLayer(base);
-    // Sound_SubGame_Miracle_Scorer::Hook_Sound_SubGame_Miracle_Scorer(base);
-    // Sound_SubGame_Miracle_Command::Hook_Sound_SubGame_Miracle_Command(base);
+    Menu::AddLog(" - Hook Others.\n");
+    Game_Map_FogLayer::HookGame_Map_FogLayer(base);
+    Sound_SubGame_Miracle_Scorer::Hook_Sound_SubGame_Miracle_Scorer(base);
+    Sound_SubGame_Miracle_Command::Hook_Sound_SubGame_Miracle_Command(base);
     
     //-------------------------------------------------------------------
 
@@ -118,11 +126,12 @@ int32_t Patapon::Initialize()
 
 
     LONG error = DetourTransactionCommit();
-    // if (error != NO_ERROR) {
-    //     Menu::AddLog(" x Some Detour Commit failed: %ld\n", error);
-    // } else {
-    //     Menu::AddLog(" - Successfully attached all hooks!\n");
-    // }
+    Menu::AddLog("\n");
+    if (error != NO_ERROR) {
+        Menu::AddLog(" x Some Detour Commit failed: %ld\n", error);
+    } else {
+        Menu::AddLog(" - Successfully attached all hooks!\n");
+    }
 
     //-------------------------------------------------------------------
     Menu::AddLog("\n");Menu::AddLog("Ö Listening Command  \n");

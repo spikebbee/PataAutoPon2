@@ -3,7 +3,6 @@
 #include <ViGEmCon.h>
 #include <thread>
 #include <UniversalHookX\src\menu\menu.hpp>
-
 Sound_BeatCommander* Sound_BeatCommander::Sound_BeatCommanderInstance=nullptr;
 
 int Sound_BeatCommander::last_tick  = -1;
@@ -221,20 +220,32 @@ void Sound_BeatCommander::InsertCommand(int move)
 void Sound_BeatCommander::HookSound_BeatCommander(uintptr_t dllBase)
 {
     // Hook getNextBeatTickTime
-    OrigGetNextBeatTickTime = reinterpret_cast<uint32_t(__thiscall*)(Sound_BeatCommander*, const void*)>(dllBase + 0x4E3D50);
+    void* addr;
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Sound", "BeatCommander", "getNextBeatTickTime");
+    OrigGetNextBeatTickTime = reinterpret_cast<uint32_t(__thiscall*)(Sound_BeatCommander*, const void*)>(addr);
     auto NextBeatTickTime = &Sound_BeatCommander::HookedGetNextBeatTickTime;
     DetourAttach(&reinterpret_cast<PVOID&>(OrigGetNextBeatTickTime), reinterpret_cast<PVOID&>(NextBeatTickTime));
 
     // Hook initialize
-    OrigInitialize = reinterpret_cast<void(__thiscall*)(Sound_BeatCommander*, void*, const void*)>(dllBase + 0x4DFE20);
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Sound", "BeatCommander", "initialize");
+    OrigInitialize = reinterpret_cast<void(__thiscall*)(Sound_BeatCommander*, void*, const void*)>(addr);
     auto Initialize = &Sound_BeatCommander::HookedInitialize;
     DetourAttach(&reinterpret_cast<PVOID&>(OrigInitialize), reinterpret_cast<PVOID&>(Initialize));
 
 
     // Hook update
-    OrigUpdate = reinterpret_cast<void(__thiscall*)(Sound_BeatCommander*, void*, uint32_t, const void*)>(dllBase + 0x4E0380);
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Sound", "BeatCommander", "update");
+    OrigUpdate = reinterpret_cast<void(__thiscall*)(Sound_BeatCommander*, void*, uint32_t, const void*)>(addr);
     auto Update = &Sound_BeatCommander::HookedUpdate;
     DetourAttach(&reinterpret_cast<PVOID&>(OrigUpdate), reinterpret_cast<PVOID&>(Update));
+
+    // Hook clearHistroy
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Sound", "BeatCommander", "clearHistroy");
+    OrigClearHistroy = reinterpret_cast<void(__thiscall*)(Sound_BeatCommander*, const void*)>(addr);
+    auto ClearHistroy = &Sound_BeatCommander::HookedClearHistroy;
+    DetourAttach(&reinterpret_cast<PVOID&>(OrigClearHistroy), reinterpret_cast<PVOID&>(ClearHistroy));
+
+
 
 //    // Hook terminate
 //     OrigTerminate = reinterpret_cast<void(__thiscall*)(Sound_BeatCommander*, const void*)>(dllBase + 0x4E00E0);
@@ -246,11 +257,6 @@ void Sound_BeatCommander::HookSound_BeatCommander(uintptr_t dllBase)
 //     auto EndSubGame = &Sound_BeatCommander::HookedEndSubGame;
 //     DetourAttach(&reinterpret_cast<PVOID&>(OrigEndSubGame), reinterpret_cast<PVOID&>(EndSubGame));
 
-
-    // Hook clearHistroy
-    OrigClearHistroy = reinterpret_cast<void(__thiscall*)(Sound_BeatCommander*, const void*)>(dllBase + 0x4E07A0);
-    auto ClearHistroy = &Sound_BeatCommander::HookedClearHistroy;
-    DetourAttach(&reinterpret_cast<PVOID&>(OrigClearHistroy), reinterpret_cast<PVOID&>(ClearHistroy));
 
 
 }

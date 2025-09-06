@@ -31,9 +31,8 @@ int32_t Game_Sound_AttackCommand::Hooked_fetchHit(void* pad, void* method)
 
 void Game_Sound_AttackCommand::Hook_Game_Sound_AttackCommand(uintptr_t dllBase)
 {
-    Orig_fetchHit = reinterpret_cast<decltype(Orig_fetchHit)>(dllBase + 0x05CAD60);
-    Instance = new Game_Sound_AttackCommand();
-
+    auto addr = ResolveMethod_ByNameAuto<void*>("P2.System.Sound","AttackCommand","fetchHit");
+    Orig_fetchHit = reinterpret_cast<decltype(Orig_fetchHit)>(addr);
     auto hook = &Game_Sound_AttackCommand::Hooked_fetchHit;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_fetchHit), reinterpret_cast<PVOID&>(hook));
 }

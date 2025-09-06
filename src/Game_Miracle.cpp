@@ -111,11 +111,8 @@ void Game_Miracle_Controller::Hooked_Game_Miracle_Controller__setup(int32_t type
 
 void Game_Miracle_Controller::Hook_Game_Miracle_Controller(uintptr_t dllBase)
 {
-    Orig_Game_Miracle_Controller__setup =
-        reinterpret_cast<decltype(Orig_Game_Miracle_Controller__setup)>(dllBase + 0x0789440);
-
-    Instance = new Game_Miracle_Controller();
-
+    auto addr = ResolveMethod_ByNameAuto<void*>("P2.Game.Miracle","Controller", "setup");
+    Orig_Game_Miracle_Controller__setup = reinterpret_cast<decltype(Orig_Game_Miracle_Controller__setup)>(addr);
     auto hook = &Game_Miracle_Controller::Hooked_Game_Miracle_Controller__setup;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_Game_Miracle_Controller__setup), reinterpret_cast<PVOID&>(hook));
 }

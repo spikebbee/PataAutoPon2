@@ -49,11 +49,13 @@ void Sound_SubGame_Scorer::Hooked_check(int32_t ret, float rate, const void* met
 
 void Sound_SubGame_Scorer::Hook_Sound_SubGame_Scorer(uintptr_t dllBase)
 {
-    Orig_getScore = reinterpret_cast<decltype(Orig_getScore)>(dllBase + 0x0505270);
+    void* addr = ResolveMethod_ByNameAuto<void*>("P2.Sound.SubGame","Scorer","getScore");
+    Orig_getScore = reinterpret_cast<decltype(Orig_getScore)>(addr);
     auto Score = &Sound_SubGame_Scorer::Hooked_getScore;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_getScore), reinterpret_cast<PVOID&>(Score));
 
-    Orig_isPerfect = reinterpret_cast<decltype(Orig_isPerfect)>(dllBase + 0x05052D0);
+    addr = ResolveMethod_ByNameAuto<void*>("P2.Sound.SubGame","Scorer","isPerfect");
+    Orig_isPerfect = reinterpret_cast<decltype(Orig_isPerfect)>(addr);
     auto Perfect = &Sound_SubGame_Scorer::Hooked_isPerfect;
     DetourAttach(&reinterpret_cast<PVOID&>(Orig_isPerfect), reinterpret_cast<PVOID&>(Perfect));
 

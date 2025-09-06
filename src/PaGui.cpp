@@ -14,15 +14,8 @@ HWND PaGuiPlugin::PataponWnd;
 bool PaGuiPlugin::Initialize(HWND window)
 {
 
-    PaGuiPlugin::PataponWnd=window;
-
-    DetourRestoreAfterWith();
-    DetourTransactionBegin();
+    PaGuiPlugin::PataponWnd=window;    
     H::Init();
-    if (DetourTransactionCommit() != ERROR_SUCCESS) return false;
-
-    // VM_END
-
     return true;    
 
 }

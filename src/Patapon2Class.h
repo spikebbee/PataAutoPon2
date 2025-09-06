@@ -7,6 +7,9 @@
 #include <map>
 #include <utility>  
 #include <types.h>
+#include <UniversalHookX\src\menu\menu.hpp>
+#include "il2cpp_resolver.h"
+
 using namespace std::chrono;
 
 class Sound_BeatCommander
